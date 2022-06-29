@@ -1,6 +1,6 @@
 # A CQRS demo 
 
-A CQRS and EventSourcing implementation with Azure Container Apps, ServiceBus and Cosmos DB (MongoDB).
+A CQRS and Event Sourcing implementation with Azure Container Apps, ServiceBus and Cosmos DB (MongoDB).
 
 ## CQRS and Event Sourcing
 

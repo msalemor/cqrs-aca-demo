@@ -25,3 +25,5 @@ A CQRS and EventSourcing implementation with Azure Container Apps, ServiceBus an
 ## Micro Services
 
 [Solution Microservices](microservices.md)
+
+## Infrastructure (Bicep)

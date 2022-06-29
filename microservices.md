@@ -4,19 +4,19 @@
 
 ## Command Stack (Go)
 
-### Vendors
+### Vendors (Go/Fiber)
 
 - POST /vendor
 - PUT /vendor/:id
 - DELETE /vendor/:id
 
-### Products
+### Products (Go/Fiber)
 
 - POST /product
 - PUT /product/:id
 - DELETE /product/:id
 
-### Warehouse
+### Warehouse (Go/Fiber)
 
 - POST /Warehouse
 - PUT /Warehouse/:id
@@ -24,13 +24,13 @@
 
 ## Event Source stack (Python)
 
-### Inventory
+### Inventory (Python/ServiceBus)
 
 - PUT /inventory/ [single or array]
 
 ## Snapshot stack
 
-### Vendors (timer) (Go)
+### Vendors (timer) 
 
 - Vendors -> Vendors snapshot
 
@@ -45,22 +45,22 @@
 
 ## Query stack (Go)
 
-### Vendors
+### Vendors (Go/Fiber)
 
 GET /vendor
 GET /vendor/:id
 
-### Products
+### Products (Go/Fiber)
 
 GET /product
 GET /product/:id
 
-### Warehouse
+### Warehouse (Go/Fiber)
 
 GET /Warehouse
 GET /Warehouse/:id
 
-### Inventory
+### Inventory (Go/Fiber)
 
 GET /inventory
 GET /inventory/:id

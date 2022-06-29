@@ -9,12 +9,13 @@ import (
 
 func main() {
 
-	app := fiber.New()
 	configs.Init()
+
+	app := configs.Config.App
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-	log.Fatal(configs.Config.App.Listen(":3000"))
+	log.Fatal(app.Listen(configs.Config.SPort))
 }

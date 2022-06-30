@@ -2,16 +2,14 @@ package controllers
 
 import (
 	"context"
+	"goservices/configs"
 	"goservices/models"
 	"net/http"
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-var validate = validator.New()
 
 func CreateVendor(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
@@ -20,12 +18,13 @@ func CreateVendor(c *fiber.Ctx) error {
 
 	//validate the request body
 	if err := c.BodyParser(&vendor); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(models.Response{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusBadRequest).JSON(models.ErrorResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 	}
 
 	//use the validator library to validate required fields
+	validate := configs.App.Validate
 	if validationErr := validate.Struct(&vendor); validationErr != nil {
-		return c.Status(http.StatusBadRequest).JSON(models.Response{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
+		return c.Status(http.StatusBadRequest).JSON(models.ErrorResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
 	}
 
 	newVendor := models.Vendor{
@@ -35,13 +34,13 @@ func CreateVendor(c *fiber.Ctx) error {
 		Title:    vendor.Title,
 	}
 
-	result, err := userCollection.InsertOne(ctx, newVendor)
+	result, err := configs.App.Collection.InsertOne(ctx, newVendor)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(models.Response{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusInternalServerError).JSON(models.ErrorResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 
 	}
 
-	return c.Status(http.StatusCreated).JSON(models.Response{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
+	return c.Status(http.StatusCreated).JSON(models.ErrorResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
 }
 
 func PutVendor(c *fiber.Ctx) error {

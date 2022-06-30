@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -17,9 +18,10 @@ type Config struct {
 	Collection *mongo.Collection
 	mongoURI   string
 	SPort      string
+	Validate   *validator.Validate
 }
 
-var AppConfig Config
+var App Config
 
 func loadEnv(envVariable string, required bool, defaultValue string) (string, error) {
 	val := os.Getenv(envVariable)
@@ -49,6 +51,11 @@ func New() Config {
 		port, _ = strconv.Atoi(sport)
 	}
 	sport = fmt.Sprintf(":%v", port)
-	config := Config{FiberApp: fiber.New(), Collection: dataaccess.ConnectDB(mongoURI, databaseName, collectionName), mongoURI: mongoURI, SPort: sport}
+	validate := validator.New()
+	config := Config{FiberApp: fiber.New(),
+		Collection: dataaccess.ConnectDB(mongoURI, databaseName, collectionName),
+		mongoURI:   mongoURI,
+		SPort:      sport,
+		Validate:   validate}
 	return config
 }

@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
+	config := configs.New()
+	app := config.FiberApp
 
-	configs.Init()
-	routes.MapVendorRoutes(configs.Config.App)
-
-	log.Fatal(configs.Config.App.Listen(":3000"))
+	routes.MapVendorRoutes(app)
+	log.Fatal(app.Listen(config.SPort))
 }

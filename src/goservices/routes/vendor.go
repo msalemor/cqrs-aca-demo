@@ -7,7 +7,7 @@ import (
 )
 
 func MapVendorRoutes(app *fiber.App) {
-	app.Post("/vendor", controllers.GetVendor)
-	app.Put("/vendor/:id", controllers.GetVendor)
-	app.Delete("/vendor/:id", controllers.GetVendor)
+	app.Post("/vendor", controllers.CreateVendor)
+	app.Put("/vendor/:id", controllers.PutVendor)
+	app.Delete("/vendor/:id", controllers.DeleteVendor)
 }

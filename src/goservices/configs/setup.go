@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -25,37 +26,48 @@ var App Config
 
 func loadEnv(envVariable string, required bool, defaultValue string) (string, error) {
 	val := os.Getenv(envVariable)
-	if required && defaultValue != "" {
+	if val != "" {
+		return val, nil
+	} else if val == "" && defaultValue != "" {
 		return defaultValue, nil
-	}
-	if required && val == "" {
+	} else if required && val == "" {
 		msg := fmt.Sprintf("Environment variable: %s is required.", envVariable)
 		return "", errors.New(msg)
 	}
-	return val, nil
+	return "", nil
 }
 
-func New() Config {
-	mongoURI, _ := loadEnv("MONGO_URI", true, "")
-	databaseName, err := loadEnv("DATABASE_NAME", true, "vendors")
+func Init(env string) {
+	err := godotenv.Load(env)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("Unable to load the %s file. Err: %s\n", env, err)
 	}
-	collectionName, _ := loadEnv("COLLECTION_NAME", true, "default")
-	if mongoURI == "" {
-		log.Fatalln("You need to set the MONGO_URI environment variable")
-	}
+
+	mongoURI, _ := loadEnv("MONGO_URI", true, "")
+
 	sport := os.Getenv("PORT")
 	port := 3000
 	if sport != "" {
 		port, _ = strconv.Atoi(sport)
 	}
 	sport = fmt.Sprintf(":%v", port)
+
+	databaseName, err := loadEnv("DATABASE_NAME", true, "vendorsDb")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	collectionName, _ := loadEnv("COLLECTION_NAME", true, "vendorsCol")
+	if mongoURI == "" {
+		log.Fatalln("You need to set the MONGO_URI environment variable")
+	}
 	validate := validator.New()
 	config := Config{FiberApp: fiber.New(),
 		Collection: dataaccess.ConnectDB(mongoURI, databaseName, collectionName),
 		mongoURI:   mongoURI,
 		SPort:      sport,
 		Validate:   validate}
-	return config
+
+	App = config
+
 }

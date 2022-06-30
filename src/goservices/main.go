@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	config := configs.New()
+	config := configs.Init()
 	app := config.FiberApp
 
 	app.Get("/", func(c *fiber.Ctx) error {

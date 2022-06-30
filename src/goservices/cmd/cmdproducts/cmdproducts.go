@@ -7,9 +7,10 @@ import (
 )
 
 func main() {
-	config := configs.New()
+	configs.Init(".env-products")
+	config := configs.App
 	app := config.FiberApp
 
-	routes.MapVendorRoutes(app)
+	routes.MapProductsRoutes(app)
 	log.Fatal(app.Listen(config.SPort))
 }

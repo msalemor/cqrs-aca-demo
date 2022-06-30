@@ -6,8 +6,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func MapVendorRoutes(app *fiber.App) {
+func MapCommandVendorsRoutes(app *fiber.App) {
 	app.Post("/vendor", controllers.CreateVendor)
-	app.Put("/vendor/:id", controllers.PutVendor)
+	app.Post("/vendors", controllers.CreateVendors)
+	app.Put("/vendor/:id", controllers.EditVendor)
 	app.Delete("/vendor/:id", controllers.DeleteVendor)
 }

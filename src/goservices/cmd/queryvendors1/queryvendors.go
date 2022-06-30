@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	env := ".env-cmd-vendors"
+	env := ".env-vendors"
 	configs.Init(env)
 	config := configs.App
 	app := config.FiberApp
